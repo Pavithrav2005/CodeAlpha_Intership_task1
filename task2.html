@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stock Market Tracker</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f1f1f1;
+    color: #333;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dark-mode body {
+    background-color: #333;
+    color: #fff;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+.container:hover {
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.header h1 {
+    font-size: 36px;
+    color: #333;
+}
+
+.stock-data {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.stock-info {
+    flex: 1;
+    margin-right: 20px;
+    padding: 20px;
+    background-color: #fafafa;
+    border-radius: 8px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+.stock-info:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.stock-info h2 {
+    margin-top: 0;
+    color: #1e88e5;
+    transition: color 0.3s ease;
+}
+
+.stock-info:hover h2 {
+    color: #1976d2;
+}
+
+.stock-info p {
+    margin: 10px 0;
+    color: #666;
+}
+
+.stock-chart {
+    flex: 1;
+    margin-top: 20px;
+}
+
+.financial-news {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.financial-news h2 {
+    margin-top: 0;
+    color: #333;
+}
+
+.financial-news ul {
+    list-style: none;
+    padding: 0;
+}
+
+.financial-news li {
+    margin-bottom: 10px;
+    color: #666;
+}
+
+.dark-mode .btn-toggle {
+    background-color: #333;
+    color: #fff;
+}
+
+.btn-toggle {
+    background-color: #1e88e5;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-toggle:hover {
+    background-color: #1976d2;
+}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Stock Market Tracker</h1>
+        
+    </div>
+    <div class="stock-data">
+        <div class="stock-info">
+            <h2>Company 1</h2>
+            <p>Symbol: <span id="stock-symbol1">AAPL</span></p>
+            <p>Company Name: <span id="stock-company1">Apple Inc.</span></p>
+            <p>Price: $<span id="stock-price1">150.25</span></p>
+            <p>Change: <span id="stock-change1">+3.50</span></p>
+            <p>Change Percent: <span id="stock-percent1">+2.45%</span></p>
+            <p>Volume: <span id="stock-volume1">1234567</span></p>
+        </div>
+        <div class="stock-info">
+            <h2>Company 2</h2>
+            <p>Symbol: <span id="stock-symbol2">GOOGL</span></p>
+            <p>Company Name: <span id="stock-company2">Alphabet Inc.</span></p>
+            <p>Price: $<span id="stock-price2">2400.50</span></p>
+            <p>Change: <span id="stock-change2">+10.75</span></p>
+            <p>Change Percent: <span id="stock-percent2">+0.45%</span></p>
+            <p>Volume: <span id="stock-volume2">987654</span></p>
+        </div>
+        <!-- Add more stock-info divs for additional companies -->
+        <div class="stock-chart">
+            <canvas id="stockChart" width="400" height="300"></canvas>
+        </div>
+    </div>
+    <div class="financial-news">
+        <h2>Financial News</h2>
+        <ul id="news-list">
+            <li>Placeholder news 1</li>
+            <li>Placeholder news 2</li>
+            <li>Placeholder news 3</li>
+            <li>Placeholder news 4</li>
+            <li>Placeholder news 5</li>
+        </ul>
+    </div>
+</div>
+<script>
+// Function to generate random stock data for chart
+function generateRandomData() {
+    const dates = [];
+    const prices = [];
+    const currentDate = new Date();
+    for (let i = 29; i >= 0; i--) {
+        const date = new Date(currentDate);
+        date.setDate(currentDate.getDate() - i);
+        dates.push(date.toLocaleDateString());
+        prices.push((Math.random() * 1000).toFixed(2));
+    }
+    return { dates, prices };
+}
+
+// Function to update stock chart with random data
+function updateChart() {
+    const { dates, prices } = generateRandomData();
+    var ctx = document.getElementById('stockChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: dates,
+            datasets: [{
+                label: 'Stock Price',
+                data: prices,
+                borderColor: '#1e88e5',
+                backgroundColor: 'rgba(30, 136, 229, 0.2)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: false
+                }
+            }
+        }
+    });
+}
+
+// Initial update of stock chart
+updateChart();
+
+
+</script>
+</body>
+</html>
