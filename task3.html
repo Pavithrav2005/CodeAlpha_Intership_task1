@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Social Media Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #333;
+      color: #fff;
+      padding: 10px;
+      text-align: center;
+    }
+
+    #feedsContainer {
+      margin: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+    }
+
+    .feedItem {
+      border: 1px solid #ccc;
+      margin-bottom: 20px;
+      padding: 20px;
+      width: calc(33.33% - 40px);
+      box-sizing: border-box;
+    }
+
+    .feedItem h3 {
+      margin-top: 0;
+    }
+
+    .feedItem p {
+      margin-bottom: 10px;
+    }
+
+    .feedItem img {
+      max-width: 100%;
+    }
+
+    .customizeForm {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .customizeForm label {
+      margin-right: 10px;
+    }
+
+    .customizeForm select {
+      padding: 5px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Social Media Dashboard</h1>
+    <button id="loginBtn" onclick="handleLogin()">Login</button>
+  </header>
+  <div id="customizeForm" class="customizeForm" style="display: none;">
+    <label for="platform">Platform:</label>
+    <select id="platform">
+      <option value="all">All</option>
+      <option value="twitter">Twitter</option>
+      <option value="instagram">Instagram</option>
+    </select>
+    <button onclick="filterFeeds()">Filter</button>
+  </div>
+  <div id="feedsContainer">
+    <!-- Feeds will be displayed here -->
+  </div>
+
+  <script>
+    const feedsContainer = document.getElementById('feedsContainer');
+    const customizeForm = document.getElementById('customizeForm');
+    let isLoggedIn = false;
+    let selectedPlatform = 'all';
+
+    // Simulated feed data
+    const feeds = [
+      { platform: 'Twitter', content: 'Some tweet content', imageUrl: 'twitter.png' },
+      { platform: 'Instagram', content: 'Some Instagram post', imageUrl: 'insta.webp' },
+      { platform: 'Twitter', content: 'Another tweet content', imageUrl: 'twitter2.png' },
+      { platform: 'Instagram', content: 'Another Instagram post', imageUrl: 'insta2.jpg' }
+    ];
+
+    // Function to display feeds
+    function displayFeeds() {
+      feedsContainer.innerHTML = '';
+      feeds.forEach(feed => {
+        if (selectedPlatform === 'all' || feed.platform.toLowerCase() === selectedPlatform) {
+          const feedItem = document.createElement('div');
+          feedItem.classList.add('feedItem');
+          feedItem.innerHTML = `
+            <h3>${feed.platform}</h3>
+            <p>${feed.content}</p>
+            <img src="${feed.imageUrl}" alt="${feed.platform} Logo">
+          `;
+          feedsContainer.appendChild(feedItem);
+        }
+      });
+    }
+
+    // Function to handle login
+    function handleLogin() {
+      if (!isLoggedIn) {
+        // Simulated login process
+        isLoggedIn = true;
+        document.getElementById('loginBtn').textContent = 'Logout';
+        document.getElementById('customizeForm').style.display = 'block';
+        // Call function to display feeds
+        displayFeeds();
+      } else {
+        // Simulated logout process
+        isLoggedIn = false;
+        document.getElementById('loginBtn').textContent = 'Login';
+        document.getElementById('customizeForm').style.display = 'none';
+        feedsContainer.innerHTML = '';
+      }
+    }
+
+    // Function to filter feeds by platform
+    function filterFeeds() {
+      selectedPlatform = document.getElementById('platform').value;
+      displayFeeds();
+    }
+  </script>
+</body>
+</html>
